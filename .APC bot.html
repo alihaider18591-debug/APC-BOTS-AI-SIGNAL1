@@ -1,0 +1,1420 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APC BOT PRO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-dark: #5649C7;
+            --secondary: #00D1A0;
+            --accent: #FF5E7D;
+            --dark: #0F0C29;
+            --light: #F5F7FF;
+            --success: #00D1A0;
+            --danger: #FF4D6D;
+            --glass: rgba(255,255,255,0.1);
+            --poll: #4CAF50;
+            --whatsapp: #25D366;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+        
+        /* Deposit Bonus Sticker */
+        .bonus-sticker {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #FF5E7D, #FF3E6C);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .bonus-sticker:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .bonus-sticker .close-btn {
+            margin-left: 10px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+        
+        .bonus-sticker .close-btn:hover {
+            opacity: 1;
+        }
+        
+        .copy-btn {
+            background: rgba(255,255,255,0.2);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* Video Background */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.15;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            padding-top: 50px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 5px 20px rgba(108, 92, 231, 0.5);
+            border: 3px solid rgba(255,255,255,0.2);
+        }
+        
+        .app-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stats {
+            background: rgba(30,33,48,0.8);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid var(--glass);
+            backdrop-filter: blur(5px);
+        }
+        
+        .signal-count {
+            color: var(--success);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 209, 160, 0.5);
+            animation: pulseGlow 2s infinite;
+        }
+        
+        /* Accuracy Proof Button */
+        .accuracy-btn {
+            display: inline-block;
+            background: var(--poll);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .accuracy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+        }
+        
+        /* Section Styling */
+        .section {
+            background: rgba(26,29,40,0.8);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--glass);
+            backdrop-filter: blur(5px);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--secondary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Platform Grid */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .platform-btn {
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            min-height: 60px;
+        }
+        
+        .platform-btn.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+        
+        .platform-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+        
+        /* Market Toggle */
+        .market-toggle {
+            display: flex;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--glass);
+        }
+        
+        .market-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .market-btn.selected {
+            background: var(--primary);
+        }
+        
+        /* Pair Selector */
+        .pair-selector {
+            position: relative;
+            width: 100%;
+        }
+        
+        .pair-display {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--glass);
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .pair-flag-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .pair-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(26,29,40,0.95);
+            border-radius: 12px;
+            border: 1px solid var(--glass);
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .pair-options.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        .pair-option {
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pair-option:hover {
+            background: rgba(108, 92, 231, 0.2);
+        }
+        
+        .flag-icon {
+            width: 20px;
+            height: 15px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        
+        .special-pair {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .special-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        
+        /* Time Frame Section */
+        .time-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .time-btn {
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            font-size: 13px;
+            flex: 1;
+            min-width: calc(20% - 8px);
+            text-align: center;
+            border: 1px solid var(--glass);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .time-btn.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(108, 92, 231, 0.3);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
+        }
+
+        /* Secondary Button */
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #00BFA5);
+            box-shadow: 0 5px 15px rgba(0, 209, 160, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 8px 20px rgba(0, 209, 160, 0.4);
+        }
+
+        /* Floating Action Buttons */
+        .floating-actions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 99;
+        }
+        
+        .floating-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .floating-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        
+        .floating-main-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            font-weight: bold;
+            font-size: 14px;
+            width: auto;
+            padding: 0 15px;
+            border-radius: 25px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .floating-secondary-btn {
+            background: linear-gradient(135deg, var(--secondary), #00BFA5);
+            font-weight: bold;
+            font-size: 14px;
+            width: auto;
+            padding: 0 15px;
+            border-radius: 25px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-options {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .action-options.show {
+            display: flex;
+        }
+        
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-box {
+            background: rgba(26,29,40,0.95);
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid var(--glass);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: modalIn 0.4s;
+        }
+        
+        .compact-modal {
+            max-width: 300px;
+            padding: 20px;
+        }
+        
+        /* Signal Modal */
+        .signal-direction {
+            font-size: 42px;
+            font-weight: 800;
+            margin: 15px 0;
+            text-transform: uppercase;
+        }
+        
+        .signal-up {
+            color: var(--success);
+            animation: pulse 2s infinite;
+        }
+        
+        .signal-down {
+            color: var(--danger);
+            animation: pulse 2s infinite;
+        }
+        
+        .signal-details {
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        
+        .signal-details div {
+            margin-bottom: 10px;
+        }
+        
+        /* License Modal */
+        .license-input-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .license-input {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border: 1px solid var(--glass);
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 15px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        .clear-license {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+        
+        .clear-license:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+        
+        .payment-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), #FF3E6C);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 94, 125, 0.3);
+            text-decoration: none;
+        }
+        
+        .payment-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 94, 125, 0.4);
+        }
+        
+        .price-tag {
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(9, 9, 113, 0.05);
+            border-radius: 10px;
+            border: 1px solid var(--glass);
+        }
+
+        .reviews-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .reviews-stars {
+            color: #FFC107;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-bottom: 8px;
+        }
+
+        .reviews-count {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .view-reviews-btn {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--secondary);
+            font-size: 12px;
+            text-decoration: none;
+            border-bottom: 1px dashed var(--secondary);
+            transition: all 0.3s;
+        }
+
+        .view-reviews-btn:hover {
+            opacity: 0.8;
+        }
+        
+        /* Contact Buttons */
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 22px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .telegram-btn {
+            background: linear-gradient(135deg, #0088cc, #00A8E8);
+        }
+        
+        .whatsapp-btn {
+            background: linear-gradient(135deg, var(--whatsapp), #128C7E);
+        }
+
+        .official-notice {
+            font-size: 11px;
+            margin-top: 15px;
+            color: var(--secondary);
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        /* Tutorial Link */
+        .tutorial-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--secondary);
+            font-size: 14px;
+            text-decoration: none;
+        }
+        
+        /* Custom Alert */
+        .custom-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 50, 50, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            text-align: center;
+            max-width: 80%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            animation: shake 0.5s;
+            display: none;
+        }
+        
+        /* Official Purchase Warning */
+        .official-warning {
+            background: #ff0000;
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.8; transform: scale(1); }
+        }
+        
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 5px rgba(0, 209, 160, 0.5); }
+            50% { text-shadow: 0 0 15px rgba(0, 209, 160, 0.8); }
+            100% { text-shadow: 0 0 5px rgba(0, 209, 160, 0.5); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            20%, 60% { transform: translate(-50%, -50%) rotate(-2deg); }
+            40%, 80% { transform: translate(-50%, -50%) rotate(2deg); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .rotate-icon {
+            animation: rotate 2s linear infinite;
+            display: inline-block;
+        }
+
+        .free-license-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--secondary), #00BFA5);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 209, 160, 0.3);
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .free-license-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 209, 160, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Deposit Bonus Sticker -->
+    <div class="bonus-sticker" id="bonus-sticker">
+        <i class="fas fa-gift"></i> Quotex 50% Bonus: <strong>APC BOT PRO</strong>
+        <span class="copy-btn" id="copy-bonus">COPY</span>
+        <span class="close-btn" id="close-bonus">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    
+    <!-- Video Background -->
+    <video class="video-bg" src="https://qxbroker.com/site/img/main_bg.mp4" autoplay muted loop></video>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="app-name">APC BOT PRO</div>
+            <div class="stats">
+                <i class="fas fa-chart-line"></i> Signals: <span class="signal-count">1267 834</span> | Accuracy: 97.3%
+                <a href="https://poll.APC.BOT" class="accuracy-btn" target="_blank">
+                    <i class="fas fa-poll"></i> Verify Accuracy
+                </a>
+            </div>
+        </div>
+        
+        <!-- Trading Platform Section -->
+        <div class="section">
+            <div class="section-title">
+                <i class="fas fa-exchange-alt"></i> Trading Platform
+            </div>
+            <div class="platform-grid">
+                <div class="platform-btn selected" data-platform="quotex">
+                    <img src="https://i.postimg.cc/G3DDw9BH/Screenshot-2025-06-18-103757.png" class="platform-icon">
+                    Quotex
+                </div>
+                <div class="platform-btn" data-platform="pocketoption">
+                    <img src="https://pocketoption.com/favicon.ico" class="platform-icon">
+                    Pocket Option
+                </div>
+                <div class="platform-btn" data-platform="binomo">
+                    <img src="https://binomo.com/favicon.ico" class="platform-icon">
+                    Binomo
+                </div>
+                <div class="platform-btn" data-platform="iqoption">
+                    <img src="https://i.vimeocdn.com/portrait/30440449_100x100?sig=e3d5108899eed3be23f67c958570e7b2d9cd9a271d9bc4104921fdba86405adc&v=1&region=us" class="platform-icon">
+                    IQ Option
+                </div>
+            </div>
+        </div>
+        
+        <!-- Market Type Section -->
+        <div class="section">
+            <div class="section-title">
+                <i class="fas fa-chart-line"></i> Market Type
+            </div>
+            <div class="market-toggle">
+                <div class="market-btn selected" id="live-market">LIVE</div>
+                <div class="market-btn" id="otc-market">OTC</div>
+            </div>
+        </div>
+        
+        <!-- Currency Pair Section -->
+        <div class="section">
+            <div class="section-title">
+                <i class="fas fa-money-bill-wave"></i> Currency Pair
+            </div>
+            <div class="pair-selector">
+                <div class="pair-display" id="pair-display">
+                    <div class="pair-flag-container">
+                        <img src="https://flagcdn.com/w40/eu.png" class="flag-icon" id="current-flag1">
+                        <img src="https://flagcdn.com/w40/us.png" class="flag-icon" id="current-flag2">
+                    </div>
+                    <span id="current-pair">EUR/USD</span>
+                    <i class="fas fa-chevron-down rotate-icon"></i>
+                </div>
+                <div class="pair-options" id="pair-options">
+                    <!-- Forex Pairs -->
+                    <div class="pair-option" data-value="EUR/USD" data-flag1="eu" data-flag2="us">
+                        <img src="https://flagcdn.com/w20/eu.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        EUR/USD
+                    </div>
+                    <div class="pair-option" data-value="GBP/USD" data-flag1="gb" data-flag2="us">
+                        <img src="https://flagcdn.com/w20/gb.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        GBP/USD
+                    </div>
+                    <div class="pair-option" data-value="USD/JPY" data-flag1="us" data-flag2="jp">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/jp.png" class="flag-icon">
+                        USD/JPY
+                    </div>
+                    <div class="pair-option" data-value="USD/CHF" data-flag1="us" data-flag2="ch">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/ch.png" class="flag-icon">
+                        USD/CHF
+                    </div>
+                    <div class="pair-option" data-value="AUD/USD" data-flag1="au" data-flag2="us">
+                        <img src="https://flagcdn.com/w20/au.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        AUD/USD
+                    </div>
+                    <div class="pair-option" data-value="USD/CAD" data-flag1="us" data-flag2="ca">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/ca.png" class="flag-icon">
+                        USD/CAD
+                    </div>
+                    <div class="pair-option" data-value="EUR/GBP" data-flag1="eu" data-flag2="gb">
+                        <img src="https://flagcdn.com/w20/eu.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/gb.png" class="flag-icon">
+                        EUR/GBP
+                    </div>
+                    <div class="pair-option" data-value="EUR/JPY" data-flag1="eu" data-flag2="jp">
+                        <img src="https://flagcdn.com/w20/eu.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/jp.png" class="flag-icon">
+                        EUR/JPY
+                    </div>
+                    <div class="pair-option" data-value="GBP/JPY" data-flag1="gb" data-flag2="jp">
+                        <img src="https://flagcdn.com/w20/gb.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/jp.png" class="flag-icon">
+                        GBP/JPY
+                    </div>
+                    <div class="pair-option" data-value="USD/TRY" data-flag1="us" data-flag2="tr">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/tr.png" class="flag-icon">
+                        USD/TRY
+                    </div>
+                    <div class="pair-option" data-value="USD/IDR" data-flag1="us" data-flag2="id">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/id.png" class="flag-icon">
+                        USD/IDR
+                    </div>
+                    <div class="pair-option" data-value="USD/PKR" data-flag1="us" data-flag2="pk">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/pk.png" class="flag-icon">
+                        USD/PKR
+                    </div>
+                    <div class="pair-option" data-value="USD/BRL" data-flag1="us" data-flag2="br">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/br.png" class="flag-icon">
+                        USD/BRL
+                    </div>
+                    <div class="pair-option" data-value="USD/ARS" data-flag1="us" data-flag2="ar">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/ar.png" class="flag-icon">
+                        USD/ARS
+                    </div>
+                    <div class="pair-option" data-value="AUD/CAD" data-flag1="au" data-flag2="ca">
+                        <img src="https://flagcdn.com/w20/au.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/ca.png" class="flag-icon">
+                        AUD/CAD
+                    </div>
+                    <div class="pair-option" data-value="NZD/JPY" data-flag1="nz" data-flag2="jp">
+                        <img src="https://flagcdn.com/w20/nz.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/jp.png" class="flag-icon">
+                        NZD/JPY
+                    </div>
+                    <div class="pair-option" data-value="USD/MXN" data-flag1="us" data-flag2="mx">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/mx.png" class="flag-icon">
+                        USD/MXN
+                    </div>
+                    <div class="pair-option" data-value="USD/INR" data-flag1="us" data-flag2="in">
+                        <img src="https://flagcdn.com/w20/us.png" class="flag-icon">
+                        <img src="https://flagcdn.com/w20/in.png" class="flag-icon">
+                        USD/INR
+                    </div>
+                    
+                    <!-- Stocks and Indices -->
+                    <div class="pair-option special-pair" data-value="S&P 500">
+                        <img src="https://s3-symbol-logo.tradingview.com/sp-500--big.svg" class="special-icon">
+                        S&P 500
+                    </div>
+                    <div class="pair-option special-pair" data-value="NASDAQ">
+                        <img src="https://s3-symbol-logo.tradingview.com/nasdaq--big.svg" class="special-icon">
+                        NASDAQ
+                    </div>
+                    <div class="pair-option special-pair" data-value="FTSE 100">
+                        <img src="https://s3-symbol-logo.tradingview.com/ftse--big.svg" class="special-icon">
+                        FTSE 100
+                    </div>
+                    <div class="pair-option special-pair" data-value="Facebook OTC">
+                        <img src="https://s3-symbol-logo.tradingview.com/meta--big.svg" class="special-icon">
+                        Facebook OTC
+                    </div>
+                    <div class="pair-option special-pair" data-value="Microsoft OTC">
+                        <img src="https://s3-symbol-logo.tradingview.com/microsoft--big.svg" class="special-icon">
+                        Microsoft OTC
+                    </div>
+                    <div class="pair-option special-pair" data-value="Tesla OTC">
+                        <img src="https://s3-symbol-logo.tradingview.com/tesla--big.svg" class="special-icon">
+                        Tesla OTC
+                    </div>
+                    <div class="pair-option special-pair" data-value="Johnson & Johnson">
+                        <img src="https://s3-symbol-logo.tradingview.com/johnson-johnson--big.svg" class="special-icon">
+                        Johnson & Johnson
+                    </div>
+                    
+                    <!-- Cryptocurrencies -->
+                    <div class="pair-option special-pair" data-value="Cardano">
+                        <img src="https://s3-symbol-logo.tradingview.com/cardano--big.svg" class="special-icon">
+                        Cardano
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Time Frame Section -->
+        <div class="section">
+            <div class="section-title">
+                <i class="fas fa-clock"></i> Time Frame
+            </div>
+            <div class="time-options">
+                <div class="time-btn selected" data-time="5">5s</div>
+                <div class="time-btn" data-time="10">10s</div>
+                <div class="time-btn" data-time="15">15s</div>
+                <div class="time-btn" data-time="30">30s</div>
+                <div class="time-btn" data-time="60">1m</div>
+                <div class="time-btn" data-time="300">5m</div>
+                <div class="time-btn" data-time="600">10m</div>
+                <div class="time-btn" data-time="900">15m</div>
+                <div class="time-btn" data-time="1800">30m</div>
+            </div>
+        </div>
+        
+        <!-- Generate Signal Button -->
+        <button class="btn" id="generate-btn">
+            <i class="fas fa-bolt"></i> GENERATE SIGNAL
+        </button>
+        
+        <!-- Tutorial Link -->
+        <a href="https://youtube.com/shorts/uQ7c4qTOgJE?si=XyPH6hUtgvFhmOnu" class="tutorial-link" target="_blank">
+            <i class="fas fa-play-circle"></i> How to use tutorial
+        </a>
+    </div>
+    
+    <!-- Signal Modal -->
+    <div class="modal" id="signal-modal">
+        <div class="modal-box">
+            <div class="signal-direction signal-up" id="signal-direction">UP</div>
+            <div class="signal-details">
+                <div><strong>Pair:</strong> <span id="result-pair">EUR/USD</span></div>
+                <div><strong>Time Frame:</strong> <span id="result-time">1m</span></div>
+                <div><strong>Confidence:</strong> <span id="ai-confidence">92%</span></div>
+            </div>
+            <button class="btn" id="close-signal">
+                <i class="fas fa-check"></i> TRADE EXECUTED
+            </button>
+        </div>
+    </div>
+    
+    <!-- License Modal -->
+    <div class="modal" id="license-modal">
+        <div class="modal-box compact-modal">
+            <h3>ENTER LICENSE KEY</h3>
+            <p>To access premium signals</p>
+            
+            <div class="license-input-container">
+                <input type="password" class="license-input" id="license-input" placeholder="XXXX-XXXX-XXXX-XXXX">
+                <i class="fas fa-times clear-license" id="clear-license"></i>
+            </div>
+            
+            <button class="btn" id="submit-license">SUBMIT</button>
+            
+            <a href="doce.html" class="free-license-btn" target="_blank">
+                <i class="fas fa-key"></i> GET FREE LICENSE KEY
+            </a>
+            
+            <a href="PAY APC.html" class="payment-btn" target="_blank">
+                <i class="fas fa-credit-card"></i> PREMIUM LICENSE
+            </a>
+            
+            <div class="price-tag">$20 LIFETIME LICENSE</div>
+
+            <!-- Reviews Section -->
+            <div class="reviews-section">
+                <div class="reviews-title">OUR COMMUNITY REVIEWS</div>
+                <div class="reviews-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <div class="reviews-count">2865 Reviews (4.6/5.0)</div>
+                <a href="https://review.APC BOT PRO" class="view-reviews-btn" target="_blank">View All Reviews</a>
+            </div>
+            
+            <div class="contact-buttons">
+                <a href="https://t.me/CCKPI" class="contact-btn telegram-btn">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://wa.me/3035513357" class="contact-btn whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            
+            <div class="official-notice">
+                Purchase from official team for lifetime support
+            </div>
+        </div>
+    </div>
+    
+    <!-- Terms Modal -->
+    <div class="modal" id="terms-modal">
+        <div class="modal-box">
+            <h3>TERMS & CONDITIONS</h3>
+            <div class="terms-content">
+                <p>Please read and accept our Terms & Conditions and Trading Rules before using APC BOT PRO.</p>
+                <p><strong>Trading Rules:</strong></p>
+                <ol>
+                    <li>Never risk more than 1% of capital per trade</li>
+                    <li>Always use stop loss</li>
+                    <li>Follow the system strictly</li>
+                    <li>Trade only with risk capital</li>
+                    <li>Avoid trading during major news events</li>
+                </ol>
+                <p>Full Terms: <a href="https://docs.google.com/document/d/1-n729hhcHyIuhMe-slG1-G2IN6carjUcjuGS8slhqfY/edit" target="_blank" style="color: var(--secondary);">Click here</a></p>
+                <p>Full Rules: <a href="https://docs.google.com/document/d/16Gph4ZI1C5xENXtfM-oBFQf_Ri-9DqFoxjtgkPukXY4/edit?usp=drivesdk" target="_blank" style="color: var(--secondary);">Click here</a></p>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="accept-terms" required>
+                <label for="accept-terms">I accept the Terms & Conditions</label>
+            </div>
+            <button class="btn" id="accept-terms-btn">PROCEED</button>
+        </div>
+    </div>
+    
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions" id="floating-actions">
+        <div class="floating-btn floating-main-btn" id="license-support-btn">
+            <i class="fas fa-key"></i> Get License
+        </div>
+        <div class="action-options" id="action-options">
+            <a href="https://free.mgbt.xyz" class="floating-btn floating-secondary-btn" target="_blank">
+                <i class="fas fa-key"></i> Free License
+            </a>
+            <a href="https://t.me/CCKPI" class="floating-btn telegram-btn">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a href="https://wa.me/3035513357" class="floating-btn whatsapp-btn">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Custom Alert -->
+    <div class="custom-alert" id="custom-alert">
+        <h3>LICENSE KEY SUSPENDED</h3>
+        <p>Your license key is misused or platform abused</p>
+        <p>This key is suspended by system.</p>
+        <p>If you want to continue using bot, contact with official team and buy new license key</p>
+        <button class="btn" id="close-alert" style="margin-top: 15px; background: var(--danger);">
+            <i class="fas fa-times"></i> CLOSE
+        </button>
+    </div>
+    
+    <script>
+        // License key protection
+        const correctLicense = "APC BOTS CCK TRADER LOGIN ERROR + 7 TIME LINCENSE PLEASE ERROR FAKE SMILE";
+        const suspendedLicense = "WRONGLOGIN@//PASSWORD=ERROR@@##++49585__LOKT_GO@4+++ENTER__!__PASS@@##!!KGFJGJBMN_TYP!PASS1 again paste, wrong, error";
+        let isLicenseValid = false;
+        let isTermsAccepted = false;
+        let isOtcSelected = false;
+        
+        // DOM elements
+        const licenseModal = document.getElementById('license-modal');
+        const licenseInput = document.getElementById('license-input');
+        const clearLicense = document.getElementById('clear-license');
+        const submitLicense = document.getElementById('submit-license');
+        const termsModal = document.getElementById('terms-modal');
+        const acceptTerms = document.getElementById('accept-terms');
+        const acceptTermsBtn = document.getElementById('accept-terms-btn');
+        const generateBtn = document.getElementById('generate-btn');
+        const signalModal = document.getElementById('signal-modal');
+        const closeSignal = document.getElementById('close-signal');
+        const licenseSupportBtn = document.getElementById('license-support-btn');
+        const actionOptions = document.getElementById('action-options');
+        const floatingActions = document.getElementById('floating-actions');
+        const bonusSticker = document.getElementById('bonus-sticker');
+        const closeBonus = document.getElementById('close-bonus');
+        const copyBonus = document.getElementById('copy-bonus');
+        const customAlert = document.getElementById('custom-alert');
+        const closeAlert = document.getElementById('close-alert');
+        const pairDisplay = document.getElementById('pair-display');
+        const currentPair = document.getElementById('current-pair');
+        const currentFlag1 = document.getElementById('current-flag1');
+        const currentFlag2 = document.getElementById('current-flag2');
+        const pairOptions = document.getElementById('pair-options');
+        const pairOptionElements = document.querySelectorAll('.pair-option');
+        const liveMarket = document.getElementById('live-market');
+        const otcMarket = document.getElementById('otc-market');
+        const timeOptionsSection = document.querySelector('.time-options').parentElement;
+        
+        // Initialize the app
+        function initApp() {
+            updateFloatingActionsVisibility();
+            setupEventListeners();
+        }
+        
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Pair selector functionality
+            pairDisplay.addEventListener('click', (e) => {
+                e.stopPropagation();
+                pairOptions.classList.toggle('show');
+                if (pairOptions.classList.contains('show')) {
+                    // Hide time frame section when pair options are shown
+                    timeOptionsSection.style.display = 'none';
+                } else {
+                    timeOptionsSection.style.display = 'block';
+                }
+            });
+            
+            pairOptionElements.forEach(option => {
+                option.addEventListener('click', () => {
+                    let pairValue = option.getAttribute('data-value');
+                    
+                    // Add OTC suffix if OTC market is selected
+                    if (isOtcSelected && !pairValue.endsWith(' OTC') && !pairValue.includes(' ')) {
+                        pairValue += ' OTC';
+                    }
+                    
+                    currentPair.textContent = pairValue;
+                    
+                    // Handle regular currency pairs with flags
+                    if (option.hasAttribute('data-flag1')) {
+                        currentFlag1.src = `https://flagcdn.com/w40/${option.getAttribute('data-flag1')}.png`;
+                        currentFlag2.src = `https://flagcdn.com/w40/${option.getAttribute('data-flag2')}.png`;
+                        currentFlag1.style.display = 'block';
+                        currentFlag2.style.display = 'block';
+                        currentFlag1.style.width = '20px';
+                        currentFlag1.style.height = '15px';
+                    } 
+                    // Handle special pairs (stocks/crypto)
+                    else {
+                        const icon = option.querySelector('.special-icon');
+                        if (icon) {
+                            currentFlag1.src = icon.src;
+                            currentFlag1.style.width = '24px';
+                            currentFlag1.style.height = '24px';
+                            currentFlag2.style.display = 'none';
+                        }
+                    }
+                    
+                    pairOptions.classList.remove('show');
+                    timeOptionsSection.style.display = 'block';
+                });
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!pairDisplay.contains(e.target) && !pairOptions.contains(e.target)) {
+                    pairOptions.classList.remove('show');
+                    timeOptionsSection.style.display = 'block';
+                }
+            });
+            
+            // Market type selection
+            liveMarket.addEventListener('click', () => {
+                liveMarket.classList.add('selected');
+                otcMarket.classList.remove('selected');
+                isOtcSelected = false;
+                updateCurrentPairDisplay();
+            });
+            
+            otcMarket.addEventListener('click', () => {
+                otcMarket.classList.add('selected');
+                liveMarket.classList.remove('selected');
+                isOtcSelected = true;
+                updateCurrentPairDisplay();
+            });
+            
+            // Other event listeners...
+            closeAlert.addEventListener('click', () => {
+                customAlert.style.display = 'none';
+            });
+            
+            closeBonus.addEventListener('click', (e) => {
+                e.stopPropagation();
+                bonusSticker.style.display = 'none';
+            });
+            
+            copyBonus.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText('APCBOT50');
+                copyBonus.textContent = 'COPIED!';
+                setTimeout(() => {
+                    copyBonus.textContent = 'COPY';
+                }, 2000);
+            });
+            
+            clearLicense.addEventListener('click', () => {
+                licenseInput.value = '';
+            });
+            
+            licenseSupportBtn.addEventListener('click', () => {
+                actionOptions.classList.toggle('show');
+            });
+            
+            // Platform selection
+            const platformBtns = document.querySelectorAll('.platform-btn');
+            platformBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    platformBtns.forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                });
+            });
+            
+            // Generate signal button
+            generateBtn.addEventListener('click', () => {
+                if (!isLicenseValid) {
+                    licenseModal.style.display = 'flex';
+                    return;
+                }
+                
+                if (!isTermsAccepted) {
+                    termsModal.style.display = 'flex';
+                    return;
+                }
+                
+                generateSignal();
+            });
+            
+            // Close signal modal
+            closeSignal.addEventListener('click', () => {
+                signalModal.style.display = 'none';
+            });
+            
+            // Time frame selection
+            const timeBtns = document.querySelectorAll('.time-btn');
+            timeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    timeBtns.forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                });
+            });
+            
+            // Submit license
+            submitLicense.addEventListener('click', () => {
+                const enteredLicense = licenseInput.value.trim();
+                
+                if (enteredLicense === correctLicense) {
+                    isLicenseValid = true;
+                    licenseModal.style.display = 'none';
+                    termsModal.style.display = 'flex';
+                    updateFloatingActionsVisibility();
+                } 
+                else if (enteredLicense === suspendedLicense) {
+                    customAlert.style.display = 'block';
+                    licenseInput.value = '';
+                }
+                else {
+                    alert('Invalid license key. Please contact support.');
+                    licenseInput.value = '';
+                }
+            });
+            
+            // Accept terms
+            acceptTermsBtn.addEventListener('click', () => {
+                if (acceptTerms.checked) {
+                    isTermsAccepted = true;
+                    termsModal.style.display = 'none';
+                    generateSignal();
+                } else {
+                    alert('Please accept the Terms & Conditions to proceed');
+                }
+            });
+        }
+        
+        // Update current pair display based on OTC selection
+        function updateCurrentPairDisplay() {
+            const currentPairValue = currentPair.textContent;
+            
+            if (isOtcSelected) {
+                if (!currentPairValue.endsWith(' OTC') && !currentPairValue.includes(' ')) {
+                    currentPair.textContent = currentPairValue + ' OTC';
+                }
+            } else {
+                currentPair.textContent = currentPairValue.replace(' OTC', '');
+            }
+        }
+        
+        // Hide floating actions when license is valid
+        function updateFloatingActionsVisibility() {
+            if (isLicenseValid) {
+                floatingActions.style.display = 'none';
+            } else {
+                floatingActions.style.display = 'flex';
+            }
+        }
+        
+        // Generate signal function
+        function generateSignal() {
+            // Simulate loading
+            setTimeout(() => {
+                signalModal.style.display = 'flex';
+                
+                // Random direction
+                const direction = Math.random() > 0.5 ? 'UP' : 'DOWN';
+                document.getElementById('signal-direction').textContent = direction;
+                document.getElementById('signal-direction').className = 
+                    `signal-direction signal-${direction.toLowerCase()}`;
+                
+                // Set pair and time
+                document.getElementById('result-pair').textContent = currentPair.textContent;
+                
+                const time = document.querySelector('.time-btn.selected').getAttribute('data-time');
+                let timeText = '';
+                if (time < 60) {
+                    timeText = time + 's';
+                } else if (time < 3600) {
+                    timeText = (time/60) + 'm';
+                } else {
+                    timeText = (time/3600) + 'h';
+                }
+                document.getElementById('result-time').textContent = timeText;
+                
+                // Random confidence (85-98%)
+                document.getElementById('ai-confidence').textContent = 
+                    (85 + Math.floor(Math.random() * 14)) + '%';
+            }, 1000);
+        }
+        
+        // Initialize the app
+        initApp();
+    </script>
+    
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/684189b995b05619230e812c/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+</body>
+</html>
